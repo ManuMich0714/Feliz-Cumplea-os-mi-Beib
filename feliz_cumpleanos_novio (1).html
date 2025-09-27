@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feliz Cumpleaños Mi Amor</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #ffdee9 0%, #b5fffc 100%);
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      overflow: hidden;
+      color: #fff;
+      text-align: center;
+    }
+    h1 {
+      font-size: 3em;
+      margin-top: 40px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      color:#ff007f;
+    }
+    p {
+      width: 80%;
+      margin: 20px auto;
+      font-size: 1.3em;
+      line-height: 1.6em;
+      color:#333;
+      background: rgba(255,255,255,0.7);
+      border-radius: 15px;
+      padding: 20px;
+    }
+    .heart {
+      width: 100px;
+      height: 90px;
+      background-color: #ff007f;
+      position: relative;
+      margin: 20px auto;
+      transform: rotate(-45deg);
+      animation: beat 1s infinite;
+    }
+    .heart:before,
+    .heart:after {
+      content: "";
+      width: 100px;
+      height: 90px;
+      background-color: #ff007f;
+      border-radius: 50%;
+      position: absolute;
+    }
+    .heart:before {
+      top: -50px;
+      left: 0;
+    }
+    .heart:after {
+      left: 50px;
+      top: 0;
+    }
+    @keyframes beat {
+      0%, 100% {transform: rotate(-45deg) scale(1);}
+      50% {transform: rotate(-45deg) scale(1.2);}
+    }
+    .balloon {
+      position: absolute;
+      bottom: -150px;
+      width: 40px;
+      height: 50px;
+      background-color: red;
+      border-radius: 50% 50% 50% 50%;
+      animation: float 10s linear infinite;
+    }
+    @keyframes float {
+      0% {transform: translateY(0);}
+      100% {transform: translateY(-110vh);}
+    }
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="confetti"></canvas>
+  <h1>Feliz Cumpleaños Mi Amor</h1>
+  <div class="heart"></div>
+  <p>
+    Hoy celebramos a la persona que llenó mi vida de luz desde aquel día en la universidad.
+Beib, desde ese instante en que nuestras miradas se cruzaron entre clases, sentí que algo especial nacía.
+Pero fue en tu casa, en aquel momento tan bello, cuando mi corazón entendió que empezaba a enamorarse de ti,
+cuando descubrí en tus gestos la ternura y en tu risa la melodía que acompaña mis días.
+<br><br>
+Cada recuerdo a tu lado es un tesoro: los mensajes al atardecer, las risas en los pasillos,
+los secretos compartidos en susurros. Cada instante contigo ha tejido versos invisibles
+que hoy quiero poner en palabras.
+<br><br>
+Tú eres mi sueño hecho realidad, mi mejor amigo, mi cómplice,
+mi confidente, mi compañero en esta aventura de amar y aprender.
+Eres la calma en mis tormentas y la chispa en mi alegría;
+en tu voz encuentro refugio y en tus abrazos la paz que siempre busqué.
+<br><br>
+Beib, gracias por enseñarme a creer, por sostener mi mano, por ser mi alegría y mi abrigo.
+Gracias por cada gesto, cada sonrisa, cada mirada que me recuerda que el amor verdadero existe.
+Quiero seguir construyendo contigo mil historias, mil caminos, ser tu apoyo en los días difíciles,
+tu impulso en cada sueño, tu sonrisa en cada amanecer.
+<br><br>
+Que este nuevo año te traiga todo lo hermoso que mereces,
+que cada día te encuentre cumpliendo tus sueños y creciendo aún más.
+Yo estaré aquí, amándote sin medida, en cada latido, en cada suspiro.
+Feliz cumpleaños, mi Beib, te amo infinitamente. 💕
+  </p>
+  <script>
+    // Globos
+    const colors = ['#ff007f', '#ffb347', '#77dd77', '#779ecb'];
+    function createBalloon() {
+      const balloon = document.createElement('div');
+      balloon.classList.add('balloon');
+      balloon.style.left = Math.random() * 100 + 'vw';
+      balloon.style.backgroundColor = colors[Math.floor(Math.random()*colors.length)];
+      balloon.style.animationDuration = (5 + Math.random()*5) + 's';
+      document.body.appendChild(balloon);
+      setTimeout(() => {
+        balloon.remove();
+      }, 10000);
+    }
+    setInterval(createBalloon, 500);
+
+    // Confeti infinito
+    const confettiCanvas = document.getElementById('confetti');
+    const ctx = confettiCanvas.getContext('2d');
+    let confettiPieces = [];
+
+    function resizeCanvas() {
+      confettiCanvas.width = window.innerWidth;
+      confettiCanvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function createConfetti() {
+      return {
+        x: Math.random() * confettiCanvas.width,
+        y: Math.random() * confettiCanvas.height,
+        r: Math.random() * 6 + 2,
+        d: Math.random() * confettiCanvas.height,
+        color: `hsl(${Math.random()*360},100%,50%)`,
+        tilt: Math.random() * 10 - 10
+      };
+    }
+
+    for(let i=0;i<150;i++) {
+      confettiPieces.push(createConfetti());
+    }
+
+    function drawConfetti() {
+      ctx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height);
+      confettiPieces.forEach((p,i) => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+        ctx.fillStyle = p.color;
+        ctx.fill();
+      });
+      updateConfetti();
+    }
+
+    function updateConfetti() {
+      confettiPieces.forEach((p,i) => {
+        p.y += Math.cos(p.d) + 1 + p.r/2;
+        p.x += Math.sin(0);
+        if (p.y > confettiCanvas.height) {
+          confettiPieces[i] = createConfetti();
+          confettiPieces[i].y = 0;
+        }
+      });
+    }
+
+    setInterval(drawConfetti,20);
+  </script>
+</body>
+</html>
